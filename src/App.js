@@ -1,26 +1,48 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Info from './components/info';
+import Form from './components/form';
+import Weather from './components/weather';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const APIkey = 'e25f4115a6cede845d4d542b244d95d5';
+class App extends React.Component {
+
+    state = {
+        temp: undefined,
+        city: undefined,
+        weath: undefined,
+        error: undefined,
+    }
+
+    checkweather = async (e) => {
+        let town = e.target.elements.town.value;
+        e.preventDefault();
+        let url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${town}&appid=${APIkey}`);
+        let data = await url.json();
+
+        console.log(data);
+
+        this.setState({
+            temp: (Math.round(data.main.temp - 273.15)),
+            city: data.name,
+            weath: data.weather[0].description,
+            error: '',
+        });
+    }
+
+    render() {
+        return(
+            <div>
+                <Info  />
+                <Form weatherMethod = {this.checkweather} />
+                <Weather
+                    temp  = {this.state.temp}
+                    city  = {this.state.city}
+                    weath = {this.state.weath}
+                    error = {this.state.error}
+                />
+            </div>
+        );
+    }
 }
 
 export default App;
