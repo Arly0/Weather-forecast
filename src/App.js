@@ -19,14 +19,31 @@ class App extends React.Component {
         let url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${town}&appid=${APIkey}`);
         let data = await url.json();
 
-        console.log(data);
+        if(town){
+            if(data.name){
+                this.setState({
+                    temp: (Math.round(data.main.temp - 273.15)),
+                    city: data.name,
+                    weath: data.weather[0].description,
+                    error: '',
+                });
+            } else{
+                this.setState({
+                    temp: undefined,
+                    city: undefined,
+                    weath: undefined,
+                    error: data.message,
+                });
+            }
+        } else{
+            this.setState({
+                temp: undefined,
+                city: undefined,
+                weath: undefined,
+                error: 'Вы не ввели город',
+            });
+        }
 
-        this.setState({
-            temp: (Math.round(data.main.temp - 273.15)),
-            city: data.name,
-            weath: data.weather[0].description,
-            error: '',
-        });
     }
 
     render() {

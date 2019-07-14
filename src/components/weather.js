@@ -14,6 +14,9 @@ class Weather extends React.Component {
                     <h3>Температура: {this.props.temp}; Погодные условия: {this.props.weath}</h3>
                 </div>
                 }
+                <div>
+                    <h2>{this.props.error}</h2>
+                </div>
 
             </div>
         );
